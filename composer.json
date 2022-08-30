@@ -1,0 +1,25 @@
+{
+    "name": "siru/payum-siru",
+    "type": "library",
+    "description": "Payum extension for Siru Mobile payment gateway",
+    "keywords": ["payment", "payum", "siru", "mobile payment"],
+    "homepage": "https://github.com/Sirumachinery/payum-siru",
+    "license": "MIT",
+    "support": {
+        "docs": "https://sirumobile.com/developers"
+    },
+    "require": {
+        "php": ">=8.0",
+        "payum/core": "^1.5",
+        "sirumobile/siru-php-sdk": "^1.0"
+    },
+    "require-dev": {
+        "php-http/guzzle6-adapter": "^1.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": { "Siru\\PayumSiru\\": "" }
+    }
+}
