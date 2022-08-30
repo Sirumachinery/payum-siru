@@ -1,5 +1,5 @@
 {
-    "name": "siru/payum-siru",
+    "name": "sirumobile/payum-siru",
     "type": "library",
     "description": "Payum extension for Siru Mobile payment gateway",
     "keywords": ["payment", "payum", "siru", "mobile payment"],
