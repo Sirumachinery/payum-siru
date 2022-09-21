@@ -36,7 +36,7 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
 
         $details = [
             'currency' => $payment->getCurrencyCode(),
-            'basePrice' => $this->formatPrice($payment->getTotalAmount()),
+            'basePrice' => self::formatPrice($payment->getTotalAmount()),
             'purchaseReference' => $payment->getNumber(),
             'redirectAfterSuccess' => $token->getTargetUrl(),
             'redirectAfterCancel' => $token->getTargetUrl(),
@@ -51,7 +51,7 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
         $request->setResult($details);
     }
 
-    private function formatPrice(int $amount) : string
+    public static function formatPrice(int $amount) : string
     {
         $basePrice = $amount / 100;
         return number_format($basePrice, 2, '.', '');

@@ -14,6 +14,7 @@ use Siru\PayumSiru\Api;
  */
 class StatusAction extends BaseApiAwareAction
 {
+
     /**
      * {@inheritDoc}
      *
@@ -56,4 +57,5 @@ class StatusAction extends BaseApiAwareAction
             $request->getModel() instanceof \ArrayAccess
         ;
     }
+
 }

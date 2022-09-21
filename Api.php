@@ -5,6 +5,7 @@ namespace Siru\PayumSiru;
 
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
+use Siru\PayumSiru\Action\ConvertPaymentAction;
 use Siru\PayumSiru\Bridge\SiruHttpTransport;
 use Siru\Signature;
 
@@ -44,6 +45,11 @@ class Api
             $paymentApi->set($key, $value);
         }
 
+        // Variant2 payments require price without VAT
+        if ('variant2' === $this->options['variant']) {
+            $paymentApi->set('basePrice', $this->calculatePriceWithoutVat($fields['basePrice'], (int) $this->options['tax_class']));
+        }
+
         return $paymentApi->createPayment();
     }
 
@@ -58,7 +64,7 @@ class Api
         $siruTransport = new SiruHttpTransport($this->client, $this->messageFactory);
         $siruTransport->setBaseUrl($this->getApiEndpoint());
 
-        $signature = new Signature($this->options['merchantId'], $this->options['secret']);
+        $signature = new Signature($this->options['merchant_id'], $this->options['merchant_secret']);
         $api = new \Siru\API($signature, $siruTransport);
         $this->prepareDefaults($api);
         return $api;
@@ -68,9 +74,9 @@ class Api
     {
         $api->setDefaults([
             'variant' => $this->options['variant'],
-            'taxClass' => $this->options['taxClass'],
-            'serviceGroup' => $this->options['serviceGroup'],
-            'purchaseCountry' => $this->options['purchaseCountry'],
+            'taxClass' => $this->options['tax_class'],
+            'serviceGroup' => $this->options['service_group'],
+            'purchaseCountry' => $this->options['purchase_country'],
         ]);
     }
 
@@ -78,4 +84,22 @@ class Api
     {
         return $this->options['sandbox'] ? 'https://staging.sirumobile.com' : 'https://payment.sirumobile.com';
     }
+
+
+    private function calculatePriceWithoutVat(string $amount, int $taxClass) : string
+    {
+        if (0 === $taxClass) {
+            return $amount;
+        }
+        $intVal = (int) str_replace('.', '', $amount);
+        $taxPercentage = match ($taxClass) {
+            1 => 10,
+            2 => 14,
+            3 => 24
+        };
+
+        $basePrice = intval($intVal * ((100-$taxPercentage) / 100));
+        return ConvertPaymentAction::formatPrice($basePrice);
+    }
+
 }
