@@ -33,13 +33,16 @@ class PayumSiruGatewayFactory extends GatewayFactory
         if (!$config['payum.api']) {
             $config['payum.default_options'] = array(
                 'sandbox' => true,
+                'disable_notify' => false,
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = [
+                'merchant_id',
+                'merchant_secret',
                 'variant',
-                'purchaseCountry',
-                'serviceGroup',
-                'taxClass'
+                'purchase_country',
+                'service_group',
+                'tax_class'
             ];
 
             $config['payum.api'] = function (ArrayObject $config) {

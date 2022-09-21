@@ -3,12 +3,16 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Action;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
+use Siru\PayumSiru\Api;
 
-class StatusAction implements ActionInterface
+/**
+ * @property Api $api
+ */
+class StatusAction extends BaseApiAwareAction
 {
     /**
      * {@inheritDoc}
@@ -26,9 +30,20 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        $request->markPending();
-
-        throw new \LogicException('Not implemented');
+        $status = $this->api->checkStatus($model['siru_uuid']);
+        switch ($status['status']) {
+            case 'confirmed':
+                $request->markCaptured();
+                break;
+            case 'canceled':
+                $request->markCanceled();
+                break;
+            case 'failed':
+                $request->markFailed();
+                break;
+            default:
+                $request->markPending();
+        }
     }
 
     /**

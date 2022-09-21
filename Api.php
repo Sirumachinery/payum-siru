@@ -33,12 +33,7 @@ class Api
      */
     public function createPayment(array $fields) : array
     {
-        $siruTransport = new SiruHttpTransport($this->client, $this->messageFactory);
-        $siruTransport->setBaseUrl($this->getApiEndpoint());
-
-        $signature = new Signature($fields['merchantId'], $this->options['secret']);
-        $api = new \Siru\API($signature, $siruTransport);
-        $this->prepareDefaults($api);
+        $api = $this->getApi();
         $notifyDisabled = $this->options['disable_notify'] ?? false;
 
         $paymentApi = $api->getPaymentApi();
@@ -52,12 +47,30 @@ class Api
         return $paymentApi->createPayment();
     }
 
+    public function checkStatus(string $uuid) : array
+    {
+        $api = $this->getApi();
+        return $api->getPurchaseStatusApi()->findPurchaseByUuid($uuid);
+    }
+
+    private function getApi() : \Siru\API
+    {
+        $siruTransport = new SiruHttpTransport($this->client, $this->messageFactory);
+        $siruTransport->setBaseUrl($this->getApiEndpoint());
+
+        $signature = new Signature($this->options['merchantId'], $this->options['secret']);
+        $api = new \Siru\API($signature, $siruTransport);
+        $this->prepareDefaults($api);
+        return $api;
+    }
+
     private function prepareDefaults(\Siru\API $api) : void
     {
         $api->setDefaults([
             'variant' => $this->options['variant'],
             'taxClass' => $this->options['taxClass'],
-            'serviceGroup' => $this->options['serviceGroup']
+            'serviceGroup' => $this->options['serviceGroup'],
+            'purchaseCountry' => $this->options['purchaseCountry'],
         ]);
     }
 
