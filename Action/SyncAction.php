@@ -5,9 +5,9 @@ namespace Siru\PayumSiru\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\Sync;
 use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
 use Siru\PayumSiru\Api;
-use Siru\PayumSiru\Request\GetStatusFromSiru;
 
 /**
  * @property Api $api
@@ -18,7 +18,7 @@ class SyncAction extends BaseApiAwareAction
     /**
      * {@inheritDoc}
      *
-     * @param GetStatusFromSiru $request
+     * @param Sync $request
      */
     public function execute($request) : void
     {
@@ -36,7 +36,7 @@ class SyncAction extends BaseApiAwareAction
     public function supports($request) : bool
     {
         return
-            $request instanceof GetStatusFromSiru &&
+            $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess
             ;
     }
