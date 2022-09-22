@@ -23,7 +23,7 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
      *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request) : void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

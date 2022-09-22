@@ -3,21 +3,23 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Request\Authorize;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
+use Siru\PayumSiru\Api;
+use Siru\PayumSiru\Request\GetStatusFromSiru;
 
-class AuthorizeAction implements ActionInterface, GatewayAwareInterface
+/**
+ * @property Api $api
+ */
+class GetStatusFromSiruAction extends BaseApiAwareAction
 {
-    use GatewayAwareTrait;
 
     /**
      * {@inheritDoc}
      *
-     * @param Authorize $request
+     * @param GetStatusInterface $request
      */
     public function execute($request) : void
     {
@@ -25,7 +27,8 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        $status = $this->api->checkStatus($model['siru_uuid']);
+        $model['siru_status'] = $status['status'];
     }
 
     /**
@@ -34,8 +37,9 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
     public function supports($request) : bool
     {
         return
-            $request instanceof Authorize &&
+            $request instanceof GetStatusFromSiru &&
             $request->getModel() instanceof \ArrayAccess
-        ;
+            ;
     }
+
 }

@@ -13,17 +13,16 @@ use Payum\Core\GatewayFactory;
 
 class PayumSiruGatewayFactory extends GatewayFactory
 {
+
     /**
      * {@inheritDoc}
      */
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config) : void
     {
         $config->defaults([
             'payum.factory_name' => 'payum-siru',
             'payum.factory_title' => 'Siru Mobile',
             'payum.action.capture' => new CaptureAction(),
-#            'payum.action.authorize' => new AuthorizeAction(),
-#            'payum.action.refund' => new RefundAction(),
             'payum.action.cancel' => new CancelAction(),
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
@@ -52,4 +51,5 @@ class PayumSiruGatewayFactory extends GatewayFactory
             };
         }
     }
+
 }

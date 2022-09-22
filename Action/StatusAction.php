@@ -3,24 +3,25 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
-use Siru\PayumSiru\Api;
+use Siru\PayumSiru\Request\GetStatusFromSiru;
 
-/**
- * @property Api $api
- */
-class StatusAction extends BaseApiAwareAction
+class StatusAction implements ActionInterface, GatewayAwareInterface
 {
+
+    use GatewayAwareTrait;
 
     /**
      * {@inheritDoc}
      *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request) : void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -31,8 +32,11 @@ class StatusAction extends BaseApiAwareAction
             return;
         }
 
-        $status = $this->api->checkStatus($model['siru_uuid']);
-        switch ($status['status']) {
+        if (!isset($model['siru_status'])) {
+            $this->gateway->execute(new GetStatusFromSiru($model));
+        }
+
+        switch ($model['siru_status']) {
             case 'confirmed':
                 $request->markCaptured();
                 break;
@@ -50,7 +54,7 @@ class StatusAction extends BaseApiAwareAction
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request) : bool
     {
         return
             $request instanceof GetStatusInterface &&
