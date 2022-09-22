@@ -59,6 +59,12 @@ class Api
         return $api->getPurchaseStatusApi()->findPurchaseByUuid($uuid);
     }
 
+    public function isNotificationAuthentic(array $fields) : bool
+    {
+        $api = $this->getApi();
+        return $api->getSignature()->isNotificationAuthentic($fields);
+    }
+
     private function getApi() : \Siru\API
     {
         $siruTransport = new SiruHttpTransport($this->client, $this->messageFactory);

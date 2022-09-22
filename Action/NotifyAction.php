@@ -3,15 +3,18 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Action;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
+use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
+use Siru\PayumSiru\Api;
 
-class NotifyAction implements ActionInterface
+/**
+ * @property Api $api
+ */
+class NotifyAction extends BaseApiAwareAction
 {
-    use GatewayAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -24,7 +27,23 @@ class NotifyAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+        $fields = json_decode($httpRequest->content);
+        if (!$fields) {
+            // Invalid JSON, maybe this was not a notification from Siru?
+            return;
+        }
+
+        if (!$this->api->isNotificationAuthentic($fields)) {
+            // signature does not match, maybe worth logging?
+            return;
+        }
+
+        $model['siru_status'] = match ($fields['siru_event']) {
+            'success' => 'confirmed',
+            'cancel' => 'canceled',
+            'failure' => 'failed'
+        };
     }
 
     /**
