@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Action;
 
-use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
@@ -13,13 +12,13 @@ use Siru\PayumSiru\Request\GetStatusFromSiru;
 /**
  * @property Api $api
  */
-class GetStatusFromSiruAction extends BaseApiAwareAction
+class SyncAction extends BaseApiAwareAction
 {
 
     /**
      * {@inheritDoc}
      *
-     * @param GetStatusInterface $request
+     * @param GetStatusFromSiru $request
      */
     public function execute($request) : void
     {

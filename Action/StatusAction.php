@@ -9,7 +9,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Siru\PayumSiru\Request\GetStatusFromSiru;
+use Payum\Core\Request\Sync;
 
 class StatusAction implements ActionInterface, GatewayAwareInterface
 {
@@ -33,7 +33,7 @@ class StatusAction implements ActionInterface, GatewayAwareInterface
         }
 
         if (!isset($model['siru_status'])) {
-            $this->gateway->execute(new GetStatusFromSiru($model));
+            $this->gateway->execute(new Sync($model));
         }
 
         switch ($model['siru_status']) {

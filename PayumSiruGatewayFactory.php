@@ -6,6 +6,7 @@ namespace Siru\PayumSiru;
 use Siru\PayumSiru\Action\CancelAction;
 use Siru\PayumSiru\Action\ConvertPaymentAction;
 use Siru\PayumSiru\Action\CaptureAction;
+use Siru\PayumSiru\Action\SyncAction;
 use Siru\PayumSiru\Action\NotifyAction;
 use Siru\PayumSiru\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -27,6 +28,7 @@ class PayumSiruGatewayFactory extends GatewayFactory
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
+            'payum.action.sync' => new SyncAction()
         ]);
 
         if (!$config['payum.api']) {
