@@ -15,13 +15,10 @@ class CancelAction implements ActionInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @param Cancel $request
      */
     public function execute($request) : void
     {
         RequestNotSupportedException::assertSupports($this, $request);
-
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         throw new \LogicException('Not implemented');

@@ -12,21 +12,11 @@ use Siru\Signature;
 class Api
 {
 
-    protected HttpClientInterface $client;
-
-    protected MessageFactory $messageFactory;
-
-    protected array $options = [];
-
     /**
      * @param array<string, string|int|null|bool> $options
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
-        $this->options = $options;
-        $this->client = $client;
-        $this->messageFactory = $messageFactory;
-    }
+    public function __construct(protected array $options, protected HttpClientInterface $client, protected MessageFactory $messageFactory)
+    {}
 
     /**
      * @param array<string, int|string|bool|null> $fields
@@ -53,12 +43,18 @@ class Api
         return $paymentApi->createPayment();
     }
 
+    /**
+     * @return array<string, string|null|bool|int>
+     */
     public function checkStatus(string $uuid) : array
     {
         $api = $this->getApi();
         return $api->getPurchaseStatusApi()->findPurchaseByUuid($uuid);
     }
 
+    /**
+     * @param array<string, string|null> $fields
+     */
     public function isNotificationAuthentic(array $fields) : bool
     {
         $api = $this->getApi();
@@ -94,6 +90,9 @@ class Api
 
     private function calculatePriceWithoutVat(string $amount, int $taxClass) : string
     {
+        if ($taxClass < 0 || $taxClass > 3) {
+            throw new \InvalidArgumentException('Argument $taxClass must be an integer between 0 and 3.');
+        }
         if (0 === $taxClass) {
             return $amount;
         }

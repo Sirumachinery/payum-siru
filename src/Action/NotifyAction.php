@@ -46,11 +46,15 @@ class NotifyAction extends BaseApiAwareAction implements LoggerAwareInterface
         }
 
         $this->logger?->debug('Siru notification', [$fields['siru_event'], $fields['siru_uuid']]);
-        $model['siru_status'] = match ($fields['siru_event']) {
+        $status = match ($fields['siru_event']) {
             'success' => 'confirmed',
             'cancel' => 'canceled',
-            'failure' => 'failed'
+            'failure' => 'failed',
+            default => null
         };
+        if (null !== $status) {
+            $model['siru_status'] = $status;
+        }
     }
 
     /**

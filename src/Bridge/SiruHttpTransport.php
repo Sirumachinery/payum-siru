@@ -22,6 +22,10 @@ class SiruHttpTransport implements TransportInterface
         $this->baseUrl = $baseUrl;
     }
 
+    /**
+     * @param array<string, mixed> $fields
+     * @return array{0: int, 1: string}
+     */
     public function request(array $fields, string $endPoint, string $method = 'GET'): array
     {
         $headers = [];

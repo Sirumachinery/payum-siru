@@ -15,12 +15,18 @@
         "sirumobile/siru-php-sdk": "^1.0"
     },
     "require-dev": {
-        "php-http/guzzle6-adapter": "^1.0"
+        "php-http/guzzle6-adapter": "^1.0",
+        "phpstan/phpstan": "^1.8",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-4": { "Siru\\PayumSiru\\": "" }
+        "psr-4": { "Siru\\PayumSiru\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Siru\\PayumSiru\\Tests\\": "tests/" }
     }
 }
