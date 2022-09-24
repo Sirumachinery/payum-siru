@@ -24,7 +24,6 @@ class PayumSiruGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'payum-siru',
             'payum.factory_title' => 'Siru Mobile',
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.cancel' => new CancelAction(),
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
