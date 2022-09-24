@@ -14,7 +14,7 @@ abstract class AbstractActionTest extends TestCase
      * @test
      * @dataProvider supportsProvider
      */
-    public function supports($request) : void
+    public function supports(mixed $request) : void
     {
         $action = $this->createAction();
         $this->assertTrue($action->supports($request));
@@ -24,7 +24,7 @@ abstract class AbstractActionTest extends TestCase
      * @test
      * @dataProvider unsupportedProvider
      */
-    public function doesNotSupport($request) : void
+    public function doesNotSupport(mixed $request) : void
     {
         $action = $this->createAction();
         $this->assertFalse($action->supports($request));
@@ -34,7 +34,7 @@ abstract class AbstractActionTest extends TestCase
      * @test
      * @dataProvider unsupportedProvider
      */
-    public function throwsExceptionForUnsupportedRequests($request) : void
+    public function throwsExceptionForUnsupportedRequests(mixed $request) : void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = $this->createAction();
@@ -43,8 +43,14 @@ abstract class AbstractActionTest extends TestCase
 
     abstract protected function createAction() : ActionInterface;
 
+    /**
+     * @return iterable<array<int, mixed>>
+     */
     abstract public function supportsProvider() : iterable;
 
+    /**
+     * @return iterable<array<int, mixed>>
+     */
     abstract public function unsupportedProvider() : iterable;
 
 }

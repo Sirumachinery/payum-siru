@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Tests\Action;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\Generic;
 use Siru\PayumSiru\Action\CancelAction;
 
 /**
@@ -32,7 +32,7 @@ class CancelActionTest extends AbstractActionTest
     }
 
     /**
-     * @return iterable<ActionInterface[]>
+     * @return iterable<Generic[]>
      */
     public function unsupportedProvider() : iterable
     {

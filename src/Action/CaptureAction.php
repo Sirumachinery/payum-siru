@@ -20,6 +20,7 @@ class CaptureAction extends BaseApiAwareAction
      * {@inheritDoc}
      *
      * @param Capture $request
+     * @throws HttpRedirect
      */
     public function execute($request) : void
     {

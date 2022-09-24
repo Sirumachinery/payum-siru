@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru\Tests\Action;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\Generic;
 use Siru\PayumSiru\Action\CaptureAction;
 use Siru\PayumSiru\Api;
 
@@ -49,18 +49,19 @@ class CaptureActionTest extends AbstractActionTest
         $model = new \ArrayObject(['foo' => 'bar']);
         $request = new Capture($model);
 
+        $exception = null;
         try {
             $action->execute($request);
         } catch(HttpRedirect $exception) {
         }
-        $this->assertTrue(isset($exception), 'Expected HttpRedirect exception.');
+        $this->assertNotNull($exception, 'Expected HttpRedirect exception.');
         $this->assertSame('https://localhost/redirect', $exception->getUrl());
-        $this->assertArrayHasKey('siru_uuid', $model);
+        $this->assertArrayHasKey('siru_uuid', $model->getArrayCopy());
         $this->assertSame('abc123', $model['siru_uuid']);
     }
 
     /**
-     * @return iterable<Cancel[]>
+     * @return iterable<Capture[]>
      */
     public function supportsProvider() : iterable
     {
@@ -68,7 +69,7 @@ class CaptureActionTest extends AbstractActionTest
     }
 
     /**
-     * @return iterable<ActionInterface[]>
+     * @return iterable<Generic[]>
      */
     public function unsupportedProvider() : iterable
     {
