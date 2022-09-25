@@ -32,7 +32,7 @@ class NotifyAction extends BaseApiAwareAction implements LoggerAwareInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
-        $fields = json_decode($httpRequest->content);
+        $fields = json_decode($httpRequest->content, true);
         if (!$fields) {
             // Invalid JSON, maybe this was not a notification from Siru?
             $this->logger?->warning('Siru NotifyAction called with empty HTTP request body');
