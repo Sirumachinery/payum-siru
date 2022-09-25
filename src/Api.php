@@ -37,7 +37,7 @@ class Api
 
         // Variant2 payments require price without VAT
         if ('variant2' === $this->options['variant']) {
-            $paymentApi->set('basePrice', $this->calculatePriceWithoutVat($fields['basePrice'], (int) $this->options['tax_class']));
+            $paymentApi->set('basePrice', PriceHelper::calculatePriceWithoutVat($fields['basePrice'], (int) $this->options['tax_class']));
         }
 
         return $paymentApi->createPayment();
@@ -85,26 +85,6 @@ class Api
     protected function getApiEndpoint() : string
     {
         return $this->options['sandbox'] ? 'https://staging.sirumobile.com' : 'https://payment.sirumobile.com';
-    }
-
-
-    private function calculatePriceWithoutVat(string $amount, int $taxClass) : string
-    {
-        if ($taxClass < 0 || $taxClass > 3) {
-            throw new \InvalidArgumentException('Argument $taxClass must be an integer between 0 and 3.');
-        }
-        if (0 === $taxClass) {
-            return $amount;
-        }
-        $intVal = (int) str_replace('.', '', $amount);
-        $taxPercentage = match ($taxClass) {
-            1 => 10,
-            2 => 14,
-            3 => 24
-        };
-
-        $basePrice = intval($intVal * ((100-$taxPercentage) / 100));
-        return ConvertPaymentAction::formatPrice($basePrice);
     }
 
 }

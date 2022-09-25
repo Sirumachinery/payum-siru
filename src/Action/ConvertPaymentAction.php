@@ -11,6 +11,7 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Core\Security\TokenInterface;
+use Siru\PayumSiru\PriceHelper;
 
 class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareInterface
 {
@@ -36,7 +37,7 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
 
         $details = [
             'currency' => $payment->getCurrencyCode(),
-            'basePrice' => self::formatPrice($payment->getTotalAmount()),
+            'basePrice' => PriceHelper::formatPrice($payment->getTotalAmount()),
             'purchaseReference' => $payment->getNumber(),
             'redirectAfterSuccess' => $token->getTargetUrl(),
             'redirectAfterCancel' => $token->getTargetUrl(),
@@ -49,12 +50,6 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
         ];
 
         $request->setResult($details);
-    }
-
-    public static function formatPrice(int $amount) : string
-    {
-        $basePrice = $amount / 100;
-        return number_format($basePrice, 2, '.', '');
     }
 
     /**
