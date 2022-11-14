@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Siru\PayumSiru;
 
-use Siru\PayumSiru\Action\CancelAction;
 use Siru\PayumSiru\Action\ConvertPaymentAction;
 use Siru\PayumSiru\Action\CaptureAction;
 use Siru\PayumSiru\Action\SyncAction;

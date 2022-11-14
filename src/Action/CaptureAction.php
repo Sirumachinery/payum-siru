@@ -7,14 +7,19 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Siru\Exception\ApiException;
 use Siru\PayumSiru\Action\Api\BaseApiAwareAction;
 use Siru\PayumSiru\Api;
 
 /**
  * @property Api $api
  */
-class CaptureAction extends BaseApiAwareAction
+class CaptureAction extends BaseApiAwareAction implements LoggerAwareInterface
 {
+
+    use LoggerAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -32,8 +37,13 @@ class CaptureAction extends BaseApiAwareAction
             return;
         }
 
-        $response = $this->api->createPayment($model->toUnsafeArrayWithoutLocal());
-        $model['siru_uuid'] = $response['uuid'];
+        try {
+            $response = $this->api->createPayment($model->toUnsafeArrayWithoutLocal());
+            $model['siru_uuid'] = $response['uuid'];
+        } catch(ApiException $e) {
+            $this->logger?->error('Failed to create payment', $e->getErrorStack());
+            throw $e;
+        }
         throw new HttpRedirect($response['redirect']);
     }
 
