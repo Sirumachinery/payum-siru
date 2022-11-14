@@ -34,6 +34,7 @@ class PayumSiruGatewayFactory extends GatewayFactory
             $config['payum.default_options'] = array(
                 'sandbox' => true,
                 'disable_notify' => false,
+                'tax_class' => 0,
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = [
@@ -42,7 +43,6 @@ class PayumSiruGatewayFactory extends GatewayFactory
                 'variant',
                 'purchase_country',
                 'service_group',
-                'tax_class'
             ];
 
             $config['payum.api'] = function (ArrayObject $config) {

@@ -76,8 +76,8 @@ class Api
     {
         $api->setDefaults([
             'variant' => $this->options['variant'],
-            'taxClass' => $this->options['tax_class'],
-            'serviceGroup' => $this->options['service_group'],
+            'taxClass' => (int) $this->options['tax_class'],
+            'serviceGroup' => (int) $this->options['service_group'],
             'purchaseCountry' => $this->options['purchase_country'],
         ]);
     }

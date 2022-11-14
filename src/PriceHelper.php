@@ -26,13 +26,13 @@ class PriceHelper
         if (0 === $taxClass) {
             return $amount;
         }
-        $intVal = (int) str_replace('.', '', $amount);
         $taxPercentage = match ($taxClass) {
             1 => 1.10,
             2 => 1.14,
             3 => 1.24
         };
 
+        $intVal = (int) str_replace('.', '', $amount);
         $basePrice = $intVal / $taxPercentage;
         return self::formatPrice($basePrice);
     }

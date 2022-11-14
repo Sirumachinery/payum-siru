@@ -71,6 +71,7 @@ class PayumSiruGatewayFactoryTest extends TestCase
         $this->assertIsArray($config['payum.default_options']);
         $this->assertArrayHasKey('sandbox', $config['payum.default_options']);
         $this->assertArrayHasKey('disable_notify', $config['payum.default_options']);
+        $this->assertArrayHasKey('tax_class', $config['payum.default_options']);
     }
 
     /**
@@ -87,7 +88,6 @@ class PayumSiruGatewayFactoryTest extends TestCase
         $this->assertContains('variant', $config['payum.required_options']);
         $this->assertContains('purchase_country', $config['payum.required_options']);
         $this->assertContains('service_group', $config['payum.required_options']);
-        $this->assertContains('tax_class', $config['payum.required_options']);
     }
 
     /**
