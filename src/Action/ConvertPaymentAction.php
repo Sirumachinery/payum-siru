@@ -46,7 +46,8 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
             'notifyAfterCancel' => $notifyToken->getTargetUrl(),
             'notifyAfterFailure' => $notifyToken->getTargetUrl(),
             'title' => $payment->getDescription(),
-            'customerEmail' => $payment->getClientEmail()
+            'customerEmail' => $payment->getClientEmail(),
+            'customerReference' => $payment->getClientId(),
         ];
 
         $request->setResult($details);
